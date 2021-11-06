@@ -1,0 +1,282 @@
+{
+  "src": {
+    "name": "复制人",
+    "needed": 1,
+    "resource": {
+      "type": "复制人"
+    }
+  },
+  "deps": [
+    {
+      "src": {
+        "resource": {
+          "type": "氧气"
+        },
+        "needed": 0.11261261261261261,
+        "name": "电解器"
+      },
+      "deps": [
+        {
+          "src": {
+            "resource": {
+              "type": "水"
+            },
+            "needed": 0.1,
+            "name": "液泵"
+          },
+          "deps": [
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.26666666666666666,
+                "name": "木料燃烧器"
+              },
+              "deps": [
+                {
+                  "src": {
+                    "resource": {
+                      "type": "木料"
+                    },
+                    "needed": 2.16,
+                    "name": "乔木树"
+                  },
+                  "deps": []
+                }
+              ]
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.09999999999999999,
+                "name": "氢气发电机"
+              },
+              "deps": []
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.13333333333333333,
+                "name": "煤炭发电机"
+              },
+              "deps": []
+            }
+          ]
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.13333333333333333,
+            "name": "木料燃烧器"
+          },
+          "deps": [
+            {
+              "src": {
+                "resource": {
+                  "type": "木料"
+                },
+                "needed": 2.16,
+                "name": "乔木树"
+              },
+              "deps": []
+            }
+          ]
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.049999999999999996,
+            "name": "氢气发电机"
+          },
+          "deps": []
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.06666666666666667,
+            "name": "煤炭发电机"
+          },
+          "deps": []
+        }
+      ]
+    },
+    {
+      "src": {
+        "resource": {
+          "type": "卡路里"
+        },
+        "needed": 3.7499999999999996,
+        "name": "毛刺花"
+      },
+      "deps": [
+        {
+          "src": {
+            "resource": {
+              "type": "水"
+            },
+            "needed": 0.0033333333333333335,
+            "name": "液泵"
+          },
+          "deps": [
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.26666666666666666,
+                "name": "木料燃烧器"
+              },
+              "deps": [
+                {
+                  "src": {
+                    "resource": {
+                      "type": "木料"
+                    },
+                    "needed": 2.16,
+                    "name": "乔木树"
+                  },
+                  "deps": []
+                }
+              ]
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.09999999999999999,
+                "name": "氢气发电机"
+              },
+              "deps": []
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.13333333333333333,
+                "name": "煤炭发电机"
+              },
+              "deps": []
+            }
+          ]
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.0022222222222222222,
+            "name": "木料燃烧器"
+          },
+          "deps": [
+            {
+              "src": {
+                "resource": {
+                  "type": "木料"
+                },
+                "needed": 2.16,
+                "name": "乔木树"
+              },
+              "deps": []
+            }
+          ]
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.0008333333333333334,
+            "name": "氢气发电机"
+          },
+          "deps": []
+        },
+        {
+          "src": {
+            "resource": {
+              "type": "焦耳"
+            },
+            "needed": 0.0011111111111111111,
+            "name": "煤炭发电机"
+          },
+          "deps": []
+        }
+      ]
+    },
+    {
+      "src": {
+        "resource": {
+          "type": "厕所"
+        },
+        "needed": 1,
+        "name": "抽水马桶"
+      },
+      "deps": [
+        {
+          "src": {
+            "resource": {
+              "type": "水"
+            },
+            "needed": 0.0008333333333333334,
+            "name": "液泵"
+          },
+          "deps": [
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.26666666666666666,
+                "name": "木料燃烧器"
+              },
+              "deps": [
+                {
+                  "src": {
+                    "resource": {
+                      "type": "木料"
+                    },
+                    "needed": 2.16,
+                    "name": "乔木树"
+                  },
+                  "deps": []
+                }
+              ]
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.09999999999999999,
+                "name": "氢气发电机"
+              },
+              "deps": []
+            },
+            {
+              "src": {
+                "resource": {
+                  "type": "焦耳"
+                },
+                "needed": 0.13333333333333333,
+                "name": "煤炭发电机"
+              },
+              "deps": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

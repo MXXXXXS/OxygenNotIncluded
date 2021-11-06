@@ -1,0 +1,26 @@
+{
+  "name": "oxygenNotIncluded",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "ts-node src/components/balancer.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.173",
+    "@types/node": "^16.11.6",
+    "lodash": "^4.17.21",
+    "prettier": "^2.4.1",
+    "ts-node-dev": "^1.1.8"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  }
+}
