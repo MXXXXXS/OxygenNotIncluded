@@ -5,7 +5,7 @@ import { constants } from "../constants";
 export const config1: Subject[] = [
   {
     name: '乔木树',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -31,7 +31,7 @@ export const config1: Subject[] = [
   },
   {
     name: '木料燃烧器',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -57,7 +57,7 @@ export const config1: Subject[] = [
   },
   {
     name: '氢气发电机',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -77,7 +77,7 @@ export const config1: Subject[] = [
   },
   {
     name: '电解器',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -110,7 +110,7 @@ export const config1: Subject[] = [
 
   {
     name: '抽水马桶',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -136,7 +136,7 @@ export const config1: Subject[] = [
   },
   {
     name: '毛刺花',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -162,7 +162,7 @@ export const config1: Subject[] = [
   },
   {
     name: '煤炭发电机',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {
@@ -188,7 +188,7 @@ export const config1: Subject[] = [
   },
   {
     name: '液泵',
-    rate: 1,
+    ratio: 1,
     input: [
       {
         resource: {

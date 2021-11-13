@@ -6,21 +6,21 @@ import { writeJson } from '../utils/writeJson'
 
 export class Subject {
   name: string
-  rate: number
+  ratio: number
   input: StorageUnit[]
   output: StorageUnit[]
   constructor({
     name,
     input,
     output,
-    rate = 1,
+    ratio = 1,
   }: {
     name: string
     input: StorageUnit[]
     output: StorageUnit[]
-    rate: number
+    ratio: number
   }) {
-    this.rate = rate || 1
+    this.ratio = ratio || 1
     this.name = name
     this.input = input
     this.output = output
@@ -46,17 +46,26 @@ export const findDependencies = (src: Subject, targets: Subject[]) => {
       if (targetFount) {
         deps.push({
           resource: srcInput.resource,
-          needed: srcInput.value / targetFount.value,
+          // needed: srcInput.value / targetFount.value,
+          needed: targetFount.value, // 在下一步按着比率计算, 这里暂存一下找到的target的value
           subject: target,
           name: target.name,
         })
       }
       return targetFount
     })
-    // 当有多个subject满足时, 平均取用
+    // 当有多个subject满足时, 按着比率取用
+    // 比如同为发电机, 如果需要能源供给分配比例为"木料燃烧器":"煤炭发电机" = 3 : 1
+    // 则木料燃烧器的ratio设为3, 煤炭发电机的ratio设为1
+    // 这样, 当需要1000j能源供给时, 750j 来自木料燃烧器, 250j来自煤炭发电机
     if (matchedTargets.length > 0) {
+      const sumRatio = deps.reduce((sum, cur) => {
+        return (sum += cur.subject.ratio)
+      }, 0)
       deps.forEach((dep) => {
-        dep.needed = dep.needed / matchedTargets.length
+        const targetFountValue = dep.needed
+        dep.needed =
+          (srcInput.value * dep.subject.ratio) / sumRatio / targetFountValue
       })
     }
     dependencies.push(...deps)
@@ -66,7 +75,7 @@ export const findDependencies = (src: Subject, targets: Subject[]) => {
 
 const replicant: Subject = new Subject({
   name: '复制人',
-  rate: 1,
+  ratio: 1,
   input: [
     {
       resource: { type: ResourceType.oxygen },
