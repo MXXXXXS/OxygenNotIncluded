@@ -20,7 +20,7 @@ export class Subject {
     output: StorageUnit[]
     ratio: number
   }) {
-    this.ratio = ratio || 1
+    this.ratio = ratio ?? 1
     this.name = name
     this.input = input
     this.output = output
@@ -46,20 +46,20 @@ export const findDependencies = (
     const srcInput = src.input[index]
     const deps: Dependency[] = []
     const matchedTargets = filter(targetsUnused, (target) => {
-      const targetFount = find(
+      const targetFounded = find(
         target.output,
         ({ resource }) => srcInput.resource.type === resource.type
       )
-      if (targetFount) {
+      if (targetFounded) {
         deps.push({
           resource: srcInput.resource,
-          // needed: srcInput.value / targetFount.value,
-          needed: targetFount.value, // 在下一步按着比率计算, 这里暂存一下找到的target的value
+          // needed: srcInput.value / targetFounded.value,
+          needed: targetFounded.value, // 在下一步按着比率计算, 这里暂存一下找到的target的value
           subject: target,
           name: target.name,
         })
       }
-      return targetFount
+      return targetFounded
     })
     // 当有多个subject满足时, 按着比率取用
     // 比如同为发电机, 如果需要能源供给分配比例为"木料燃烧器":"煤炭发电机" = 3 : 1
@@ -70,9 +70,11 @@ export const findDependencies = (
         return (sum += cur.subject.ratio)
       }, 0)
       deps.forEach((dep) => {
-        const targetFountValue = dep.needed
+        const targetFoundedValue = dep.needed
         dep.needed =
-          (srcInput.value * dep.subject.ratio) / sumRatio / targetFountValue
+          (srcInput.value * dep.subject.ratio) /
+          (sumRatio || 1) /
+          targetFoundedValue
       })
       dependencies.push(...deps)
     } else {
@@ -82,10 +84,6 @@ export const findDependencies = (
     }
   }
   return dependencies
-}
-
-interface SimpleDependency extends Omit<Dependency, 'subject'> {
-  subject?: Subject
 }
 
 const genSubjectObjects = (subjects: Subject[]) =>
@@ -128,15 +126,11 @@ const buildDeps = (
   }
 }
 
-
 const rmTreeProp = (tree: DepTree<Partial<DependencyWithParent>>) => {
   delete tree.src.subject
   delete tree.src.parent
+  delete tree.src.needed
   tree.deps.forEach(rmTreeProp)
-}
-
-interface SimpleDependencyWithParent extends SimpleDependency {
-  parent: SimpleDependencyWithParent
 }
 
 const multiplyAllNeeded = (dep: DependencyWithParent): number => {
@@ -172,6 +166,8 @@ const replicant: Subject = new Subject({
       },
       value: 1000,
     },
+  ],
+  output: [
     {
       resource: {
         type: ResourceType.toilet,
@@ -179,7 +175,6 @@ const replicant: Subject = new Subject({
       value: 1,
     },
   ],
-  output: [],
 })
 export const balancer = (subjects: Subject[]) => {
   const subjectObjects = genSubjectObjects(subjects)
@@ -198,12 +193,8 @@ export const balancer = (subjects: Subject[]) => {
 
   // 依赖项统计
   const depsList: Record<string, number> = {}
-  buildDepsList(depsList, dependencies )
+  buildDepsList(depsList, dependencies)
   writeJson('depsList.json', depsList)
-
-  // 打印依赖树
-  rmTreeProp(dependencies)
-  writeJson('deps.json', dependencies)
 
   // 资源平衡统计
   const resourceList: Record<string, number> = {}
@@ -230,4 +221,8 @@ export const balancer = (subjects: Subject[]) => {
     }
   })
   writeJson('resourceList.json', sortRecord(resourceList))
+
+  // 打印依赖树
+  rmTreeProp(dependencies)
+  writeJson('deps.json', dependencies)
 }

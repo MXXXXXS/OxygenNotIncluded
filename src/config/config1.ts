@@ -56,8 +56,28 @@ export const config1: Subject[] = [
     ],
   },
   {
-    name: '碳素脱离器',
+    name: '抛壳蟹',
     ratio: 1,
+    input: [
+      {
+        resource: {
+          type: ResourceType.dirtySoil
+        },
+        value: 140 * 1000
+      }
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.filteringMedium
+        },
+        value: 70 * 1000
+      }
+    ]
+  },
+  {
+    name: '碳素脱离器',
+    ratio: 2,
     input: [
       {
         resource: {
@@ -89,7 +109,7 @@ export const config1: Subject[] = [
   },
   {
     name: '氢气发电机',
-    ratio: 1,
+    ratio: 3,
     input: [
       {
         resource: {
@@ -198,15 +218,29 @@ export const config1: Subject[] = [
     ],
   },
   {
-    name: '抽水马桶',
+    name: '好吃哈奇',
     ratio: 1,
     input: [
       {
         resource: {
-          type: ResourceType.replicant
+          type: ResourceType.soil
         },
-        value: 1
-      },
+        value:  140 * 1000 
+      }
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.coal
+        },
+        value:  70 * 1000 
+      }
+    ]
+  },
+  {
+    name: '抽水马桶',
+    ratio: 0,
+    input: [
       {
         resource: {
           type: ResourceType.water,
@@ -257,7 +291,7 @@ export const config1: Subject[] = [
   },
   {
     name: '煤炭发电机',
-    ratio: 1,
+    ratio: 3,
     input: [
       {
         resource: {

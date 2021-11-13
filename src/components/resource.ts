@@ -1,7 +1,7 @@
 export enum ResourceType {
   replicant = '复制人',
   wood= '木料',
-  toilet = '厕所',
+  toilet = '厕所需求',
   water = '水',
   dirtyWater = '污染水',
   saltWater = '盐水',
