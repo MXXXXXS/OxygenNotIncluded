@@ -42,7 +42,8 @@ export const findDependencies = (
   const dependencies: Dependency[] = []
   // 防止依赖无限循环
   const targetsUnused = filter(targets, ({ name }) => !skipNames.includes(name))
-  src.input.forEach((srcInput) => {
+  for (let index = 0; index < src.input.length; index++) {
+    const srcInput = src.input[index]
     const deps: Dependency[] = []
     const matchedTargets = filter(targetsUnused, (target) => {
       const targetFount = find(
@@ -73,35 +74,15 @@ export const findDependencies = (
         dep.needed =
           (srcInput.value * dep.subject.ratio) / sumRatio / targetFountValue
       })
+      dependencies.push(...deps)
+    } else {
+      // 必须所有input都满足(input之间是"and"关系), 否则依赖组就不成立
+      dependencies.splice(0, Infinity)
+      break
     }
-    dependencies.push(...deps)
-  })
+  }
   return dependencies
 }
-
-const replicant: Subject = new Subject({
-  name: '复制人',
-  ratio: 1,
-  input: [
-    {
-      resource: { type: ResourceType.oxygen },
-      value: 100 * constants.cycle,
-    },
-    {
-      resource: {
-        type: ResourceType.calorie,
-      },
-      value: 1000,
-    },
-    {
-      resource: {
-        type: ResourceType.toilet,
-      },
-      value: 1,
-    },
-  ],
-  output: [],
-})
 
 interface SimpleDependency extends Omit<Dependency, 'subject'> {
   subject?: Subject
@@ -147,8 +128,10 @@ const buildDeps = (
   }
 }
 
-const rmTreeProp = (tree: DepTree<SimpleDependency>) => {
+
+const rmTreeProp = (tree: DepTree<Partial<DependencyWithParent>>) => {
   delete tree.src.subject
+  delete tree.src.parent
   tree.deps.forEach(rmTreeProp)
 }
 
@@ -156,7 +139,7 @@ interface SimpleDependencyWithParent extends SimpleDependency {
   parent: SimpleDependencyWithParent
 }
 
-const multiplyAllNeeded = (dep: SimpleDependencyWithParent): number => {
+const multiplyAllNeeded = (dep: DependencyWithParent): number => {
   if (dep.parent) {
     return dep.needed * multiplyAllNeeded(dep.parent)
   }
@@ -165,7 +148,7 @@ const multiplyAllNeeded = (dep: SimpleDependencyWithParent): number => {
 
 const buildDepsList = (
   list: Record<string, number>,
-  tree: DepTree<SimpleDependencyWithParent>
+  tree: DepTree<DependencyWithParent>
 ) => {
   if (!list[tree.src.name]) {
     list[tree.src.name] = multiplyAllNeeded(tree.src)
@@ -174,13 +157,30 @@ const buildDepsList = (
   }
   tree.deps.forEach((dep) => buildDepsList(list, dep))
 }
-const addParent = (tree: DepTree<SimpleDependencyWithParent>) => {
-  tree.deps.forEach((dep) => {
-    dep.src.parent = tree.src
-    addParent(dep)
-  })
-}
 
+const replicant: Subject = new Subject({
+  name: '复制人',
+  ratio: 1,
+  input: [
+    {
+      resource: { type: ResourceType.oxygen },
+      value: 100 * constants.cycle,
+    },
+    {
+      resource: {
+        type: ResourceType.calorie,
+      },
+      value: 1000,
+    },
+    {
+      resource: {
+        type: ResourceType.toilet,
+      },
+      value: 1,
+    },
+  ],
+  output: [],
+})
 export const balancer = (subjects: Subject[]) => {
   const subjectObjects = genSubjectObjects(subjects)
 
@@ -195,14 +195,15 @@ export const balancer = (subjects: Subject[]) => {
     },
     subjectObjects
   )
-  rmTreeProp(dependencies)
-  writeJson('deps.json', dependencies)
 
   // 依赖项统计
-  addParent(dependencies as DepTree<SimpleDependencyWithParent>)
   const depsList: Record<string, number> = {}
-  buildDepsList(depsList, dependencies as DepTree<SimpleDependencyWithParent>)
+  buildDepsList(depsList, dependencies )
   writeJson('depsList.json', depsList)
+
+  // 打印依赖树
+  rmTreeProp(dependencies)
+  writeJson('deps.json', dependencies)
 
   // 资源平衡统计
   const resourceList: Record<string, number> = {}

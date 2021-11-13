@@ -203,6 +203,12 @@ export const config1: Subject[] = [
     input: [
       {
         resource: {
+          type: ResourceType.replicant
+        },
+        value: 1
+      },
+      {
+        resource: {
           type: ResourceType.water,
         },
         value: 5000,
