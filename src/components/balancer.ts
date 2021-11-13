@@ -34,11 +34,17 @@ interface Dependency {
   name: string
 }
 
-export const findDependencies = (src: Subject, targets: Subject[]) => {
+export const findDependencies = (
+  src: Subject,
+  targets: Subject[],
+  skipNames: string[] = []
+) => {
   const dependencies: Dependency[] = []
+  // 防止依赖无限循环
+  const targetsUnused = filter(targets, ({ name }) => !skipNames.includes(name))
   src.input.forEach((srcInput) => {
     const deps: Dependency[] = []
-    const matchedTargets = filter(targets, (target) => {
+    const matchedTargets = filter(targetsUnused, (target) => {
       const targetFount = find(
         target.output,
         ({ resource }) => srcInput.resource.type === resource.type
@@ -109,15 +115,34 @@ interface DepTree<T = Dependency> {
   deps: DepTree<T>[]
 }
 
-const deepFindDependencies = (
+interface DependencyWithParent extends Dependency {
+  parent: DependencyWithParent | null
+}
+
+const parentNames = (parent: DependencyWithParent | null): string[] => {
+  if (parent) {
+    return [parent.name, ...parentNames(parent.parent)]
+  } else {
+    return []
+  }
+}
+
+const buildDeps = (
+  parent: DependencyWithParent | null,
   dep: Dependency,
   subjectObjects: Subject[]
-): DepTree => {
-  const deps = findDependencies(dep.subject, subjectObjects)
+): DepTree<DependencyWithParent> => {
+  const parentNamesAlreadyUsed = parentNames(parent)
+  const deps = findDependencies(
+    dep.subject,
+    subjectObjects,
+    parentNamesAlreadyUsed
+  )
+  const src = { ...dep, parent }
   return {
-    src: dep,
+    src,
     deps: deps.map((dep) => {
-      return deepFindDependencies(dep, subjectObjects)
+      return buildDeps(src, dep, subjectObjects)
     }),
   }
 }
@@ -160,7 +185,8 @@ export const balancer = (subjects: Subject[]) => {
   const subjectObjects = genSubjectObjects(subjects)
 
   // 依赖树构建
-  const dependencies = deepFindDependencies(
+  const dependencies = buildDeps(
+    null,
     {
       name: replicant.name,
       subject: replicant,

@@ -1,6 +1,6 @@
-import { Subject } from "../components/balancer";
-import { ResourceType } from "../components/resource";
-import { constants } from "../constants";
+import { Subject } from '../components/balancer'
+import { ResourceType } from '../components/resource'
+import { constants } from '../constants'
 
 export const config1: Subject[] = [
   {
@@ -56,12 +56,44 @@ export const config1: Subject[] = [
     ],
   },
   {
+    name: '碳素脱离器',
+    ratio: 1,
+    input: [
+      {
+        resource: {
+          type: ResourceType.water,
+        },
+        value: 1000 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.carbonDioxide,
+        },
+        value: 300 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.power
+        },
+        value: 120 * constants.cycle
+      }
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.dirtyWater,
+        },
+        value: 1000 * constants.cycle,
+      },
+    ],
+  },
+  {
     name: '氢气发电机',
     ratio: 1,
     input: [
       {
         resource: {
-          type: ResourceType.hydrogenInWorldInput,
+          type: ResourceType.hydrogen,
         },
         value: 100 * constants.cycle,
       },
@@ -101,13 +133,70 @@ export const config1: Subject[] = [
       },
       {
         resource: {
-          type: ResourceType.hydrogenInWorldOutput,
+          type: ResourceType.hydrogen,
         },
         value: 112 * constants.cycle,
       },
     ],
   },
-
+  {
+    name: '净水器',
+    ratio: 1,
+    input: [
+      {
+        resource: {
+          type: ResourceType.power,
+        },
+        value: 120 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.dirtyWater,
+        },
+        value: 5 * 1000 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.filteringMedium,
+        },
+        value: 1000 * constants.cycle,
+      },
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.water,
+        },
+        value: 5 * 1000 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.dirtySoil,
+        },
+        value: 200 * constants.cycle,
+      },
+    ],
+  },
+  {
+    name: '堆肥堆',
+    ratio: 1,
+    input: [
+      {
+        resource: {
+          type: ResourceType.dirtySoil,
+        },
+        value: 100 * constants.cycle,
+      },
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.soil,
+        },
+        value: 100 * constants.cycle,
+      },
+    ],
+  },
   {
     name: '抽水马桶',
     ratio: 1,
@@ -128,7 +217,7 @@ export const config1: Subject[] = [
       },
       {
         resource: {
-          type: ResourceType.dirtyWaterInWorldOutput,
+          type: ResourceType.dirtyWater,
         },
         value: 11.7 * 1000,
       },
@@ -198,7 +287,7 @@ export const config1: Subject[] = [
       },
       {
         resource: {
-          type: ResourceType.waterInWorldInput,
+          type: ResourceType.water,
         },
         value: 10 * 1000 * constants.cycle,
       },
