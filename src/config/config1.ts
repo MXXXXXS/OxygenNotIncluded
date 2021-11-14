@@ -61,19 +61,19 @@ export const config1: Subject[] = [
     input: [
       {
         resource: {
-          type: ResourceType.dirtySoil
+          type: ResourceType.dirtySoil,
         },
-        value: 140 * 1000
-      }
+        value: 140 * 1000,
+      },
     ],
     output: [
       {
         resource: {
-          type: ResourceType.filteringMedium
+          type: ResourceType.filteringMedium,
         },
-        value: 70 * 1000
-      }
-    ]
+        value: 70 * 1000,
+      },
+    ],
   },
   {
     name: '碳素脱离器',
@@ -93,10 +93,10 @@ export const config1: Subject[] = [
       },
       {
         resource: {
-          type: ResourceType.power
+          type: ResourceType.power,
         },
-        value: 120 * constants.cycle
-      }
+        value: 120 * constants.cycle,
+      },
     ],
     output: [
       {
@@ -223,19 +223,64 @@ export const config1: Subject[] = [
     input: [
       {
         resource: {
-          type: ResourceType.soil
+          type: ResourceType.soil,
         },
-        value:  140 * 1000 
-      }
+        value: 140 * 1000,
+      },
     ],
     output: [
       {
         resource: {
-          type: ResourceType.coal
+          type: ResourceType.coal,
         },
-        value:  70 * 1000 
-      }
-    ]
+        value: 70 * 1000,
+      },
+    ],
+  },
+  {
+    name: '天然气间歇泉',
+    ratio: 1,
+    input: [],
+    output: [
+      {
+        resource: {
+          type: ResourceType.gas,
+        },
+        value: 130 * constants.cycle,
+      },
+    ],
+  },
+  {
+    name: '天然气发电机',
+    ratio: 1,
+    input: [
+      {
+        resource: {
+          type: ResourceType.gas,
+        },
+        value: 90 * constants.cycle,
+      },
+    ],
+    output: [
+      {
+        resource: {
+          type: ResourceType.power,
+        },
+        value: 800 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.carbonDioxide,
+        },
+        value: 22.5 * constants.cycle,
+      },
+      {
+        resource: {
+          type: ResourceType.dirtyWater,
+        },
+        value: 67.5 * constants.cycle,
+      },
+    ],
   },
   {
     name: '抽水马桶',

@@ -1,8 +1,9 @@
 import { filter, find } from 'lodash'
 import { Resource, ResourceType, StorageUnit } from './resource'
-import { constants } from '../constants'
+import { constants, replicant } from '../constants'
 import { sortRecord } from '../utils/sortRecord'
 import { writeJson } from '../utils/writeJson'
+import { resourceCalculator } from './resourceCalculator'
 
 export class Subject {
   name: string
@@ -152,31 +153,8 @@ const buildDepsList = (
   tree.deps.forEach((dep) => buildDepsList(list, dep))
 }
 
-const replicant: Subject = new Subject({
-  name: '复制人',
-  ratio: 1,
-  input: [
-    {
-      resource: { type: ResourceType.oxygen },
-      value: 100 * constants.cycle,
-    },
-    {
-      resource: {
-        type: ResourceType.calorie,
-      },
-      value: 1000,
-    },
-  ],
-  output: [
-    {
-      resource: {
-        type: ResourceType.toilet,
-      },
-      value: 1,
-    },
-  ],
-})
 export const balancer = (subjects: Subject[]) => {
+  const repSubject = new Subject(replicant)
   const subjectObjects = genSubjectObjects(subjects)
 
   // 依赖树构建
@@ -184,7 +162,7 @@ export const balancer = (subjects: Subject[]) => {
     null,
     {
       name: replicant.name,
-      subject: replicant,
+      subject: repSubject,
       needed: 1,
       resource: { type: ResourceType.replicant },
     },
@@ -197,29 +175,7 @@ export const balancer = (subjects: Subject[]) => {
   writeJson('depsList.json', depsList)
 
   // 资源平衡统计
-  const resourceList: Record<string, number> = {}
-  Object.entries(depsList).forEach(([name, value]) => {
-    const subject = find(
-      [replicant, ...subjects],
-      ({ name: subjectName }) => subjectName === name
-    )
-    if (subject) {
-      subject.input.forEach(({ resource, value: inputValue }) => {
-        if (!resourceList[resource.type]) {
-          resourceList[resource.type] = -inputValue * value
-        } else {
-          resourceList[resource.type] -= inputValue * value
-        }
-      })
-      subject.output.forEach(({ resource, value: outputValue }) => {
-        if (!resourceList[resource.type]) {
-          resourceList[resource.type] = outputValue * value
-        } else {
-          resourceList[resource.type] += outputValue * value
-        }
-      })
-    }
-  })
+  const resourceList = resourceCalculator(depsList, subjects)
   writeJson('resourceList.json', sortRecord(resourceList))
 
   // 打印依赖树

@@ -16,6 +16,19 @@
       "outFiles": [
         "${workspaceFolder}/out/**/*.js"
       ]
-    }
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "calcRes",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/calcRes.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/out/**/*.js"
+      ]
+    },
   ]
 }
